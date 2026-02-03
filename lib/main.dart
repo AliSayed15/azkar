@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tasbeeh_app/core/main_layout.dart';
+import 'package:tasbeeh_app/features/azkar/services/azkar_cache.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Hive فقط
+  // Initialize Hive
   await Hive.initFlutter();
   await Hive.openBox('tasbeehBox');
   
-  // تجاهل الإشعارات مؤقتاً
+  // Initialize Azkar Cache
+  await AzkarCache.init();
+  
   runApp(const TasbeehApp());
 }
 
@@ -33,4 +36,4 @@ class TasbeehApp extends StatelessWidget {
       home: const MainLayout(),
     );
   }
-}
+} 

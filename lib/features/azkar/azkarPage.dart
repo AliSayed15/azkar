@@ -6,9 +6,10 @@ class AzkarPage extends StatelessWidget {
   const AzkarPage({super.key});
 
   Future<List<dynamic>> loadAzkar() async {
-    final data = await rootBundle.loadString('assets/data/azkar.json');
-    return json.decode(data);
-  }
+  final data = await rootBundle.loadString('assets/data/azkar.json');
+  final Map<String, dynamic> jsonMap = json.decode(data);  // ← حوّلنا لـ Map
+  return jsonMap['azkar'] ?? [];  // ← استخرجنا الـ array من جوا الـ object
+}
 
   @override
   Widget build(BuildContext context) {

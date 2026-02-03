@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tasbeeh_app/features/azkar/azkarPage.dart';
+import 'package:tasbeeh_app/features/azkar/presentation/azkar_categories_page.dart';
 import 'package:tasbeeh_app/features/statistics/statisticsPage.dart';
 import 'package:tasbeeh_app/features/tasbeeh/presentation/presentationpage.dart';
 
@@ -15,10 +15,10 @@ class _MainLayoutState extends State<MainLayout> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = const [
-    TasbeehPage(),
-    AzkarPage(),
-    StatisticsPage(),
-  ];
+  TasbeehPage(),
+  AzkarCategoriesPage(),  // ← الجديد
+  StatisticsPage(),
+];
 
   @override
   Widget build(BuildContext context) {
