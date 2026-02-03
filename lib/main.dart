@@ -1,39 +1,85 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:tasbeeh_app/core/main_layout.dart';
-import 'package:tasbeeh_app/features/azkar/services/azkar_cache.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'screens/tasbeeh_screen.dart';
+import 'screens/azkar_list_screen.dart';
+import 'screens/azkar_categories_screen.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  
-  // Initialize Hive
-  await Hive.initFlutter();
-  await Hive.openBox('tasbeehBox');
-  
-  // Initialize Azkar Cache
-  await AzkarCache.init();
-  
-  runApp(const TasbeehApp());
+void main() {
+  runApp(const AzkarApp());
 }
 
-class TasbeehApp extends StatelessWidget {
-  const TasbeehApp({super.key});
+// 🎨 Colors
+const Color primaryGreen = Color(0xFF1F6E43);
+const Color goldAccent = Color(0xFFC9A24D);
+const Color backgroundColor = Color(0xFFF8F9F6);
+const Color textPrimary = Color(0xFF2E2E2E);
+const Color textSecondary = Color(0xFF6B7280);
+
+class AzkarApp extends StatelessWidget {
+  const AzkarApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Tasbeeh App',
+
+      // 🌍 Arabic + RTL
+      locale: const Locale('ar'),
+      supportedLocales: const [
+        Locale('ar'),
+      ],
+
+      // ✅ THIS IS THE IMPORTANT PART
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+
       theme: ThemeData(
         useMaterial3: true,
-        colorSchemeSeed: Colors.green,
+        fontFamily: 'Cairo',
+        scaffoldBackgroundColor: backgroundColor,
+
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: primaryGreen,
+          primary: primaryGreen,
+          secondary: goldAccent,
+          background: backgroundColor,
+        ),
+
+        appBarTheme: const AppBarTheme(
+          backgroundColor: backgroundColor,
+          elevation: 0,
+          centerTitle: true,
+          titleTextStyle: TextStyle(
+            color: primaryGreen,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+          iconTheme: IconThemeData(color: primaryGreen),
+        ),
       ),
-      darkTheme: ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.dark,
-        colorSchemeSeed: Colors.green,
+
+home: const AzkarCategoriesScreen(),    );
+  }
+}
+
+class PlaceholderScreen extends StatelessWidget {
+  const PlaceholderScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('الأذكار'),
       ),
-      home: const MainLayout(),
+      body: const Center(
+        child: Text(
+          'واجهة مؤقتة\nسنبدأ التصميم الحقيقي الآن',
+          textAlign: TextAlign.center,
+        ),
+      ),
     );
   }
-} 
+}
