@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import '../data/adhkar_data.dart';
+import '../models/azkar_section.dart';
 import '../models/dhikr.dart';
 import 'tasbeeh_screen.dart';
 
-/// Types of Azkar
-enum AzkarType { general, morning, evening }
-
 class AzkarListScreen extends StatefulWidget {
-  final AzkarType type;
+  final AzkarSection apiSection;
 
   const AzkarListScreen({
     super.key,
-    required this.type,
+    required this.apiSection,
   });
 
   @override
@@ -20,28 +17,14 @@ class AzkarListScreen extends StatefulWidget {
 
 class _AzkarListScreenState extends State<AzkarListScreen> {
   final Map<String, int> counters = {};
-  late final List<Dhikr> currentAdhkar;
 
   @override
   void initState() {
     super.initState();
 
-    /// Select the correct adhkar list based on type
-    switch (widget.type) {
-      case AzkarType.general:
-        currentAdhkar = generalAdhkar;
-        break;
-      case AzkarType.morning:
-        currentAdhkar = morningAdhkar;
-        break;
-      case AzkarType.evening:
-        currentAdhkar = eveningAdhkar;
-        break;
-    }
-
-    /// Initialize counters (keep logic exactly as before)
-    for (var dhikr in currentAdhkar) {
-      counters.putIfAbsent(dhikr.id, () => 0);
+    /// Initialize counters using zekr text as key (since API items don't have ID)
+    for (var item in widget.apiSection.items) {
+      counters.putIfAbsent(item.zekr, () => 0);
     }
   }
 
@@ -51,14 +34,22 @@ class _AzkarListScreenState extends State<AzkarListScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_getScreenTitle()),
+        title: Text(widget.apiSection.title),
       ),
       body: ListView.separated(
         padding: const EdgeInsets.all(16),
-        itemCount: currentAdhkar.length,
+        itemCount: widget.apiSection.items.length,
         separatorBuilder: (_, __) => const SizedBox(height: 12),
         itemBuilder: (context, index) {
-          final Dhikr dhikr = currentAdhkar[index];
+          final item = widget.apiSection.items[index];
+
+          /// Convert DhikrApiItem to Dhikr for TasbeehScreen compatibility
+          final dhikr = Dhikr(
+            id: item.zekr, // Using zekr text as unique identifier
+            title: item.zekr,
+            text: item.zekr,
+            targetCount: item.repeat,
+          );
 
           return InkWell(
             borderRadius: BorderRadius.circular(20),
@@ -68,14 +59,14 @@ class _AzkarListScreenState extends State<AzkarListScreen> {
                 MaterialPageRoute(
                   builder: (_) => TasbeehScreen(
                     dhikr: dhikr,
-                    initialCount: counters[dhikr.id] ?? 0,
+                    initialCount: counters[item.zekr] ?? 0,
                   ),
                 ),
               );
 
               if (updatedCount != null) {
                 setState(() {
-                  counters[dhikr.id] = updatedCount;
+                  counters[item.zekr] = updatedCount;
                 });
               }
             },
@@ -89,7 +80,7 @@ class _AzkarListScreenState extends State<AzkarListScreen> {
                 children: [
                   Expanded(
                     child: Text(
-                      dhikr.title,
+                      item.zekr,
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -97,7 +88,7 @@ class _AzkarListScreenState extends State<AzkarListScreen> {
                     ),
                   ),
                   Text(
-                    '${counters[dhikr.id] ?? 0}/${dhikr.targetCount}',
+                    '${counters[item.zekr] ?? 0}/${item.repeat}',
                     style: TextStyle(
                       fontSize: 16,
                       color: primaryColor,
@@ -112,17 +103,5 @@ class _AzkarListScreenState extends State<AzkarListScreen> {
         },
       ),
     );
-  }
-
-  /// Screen title based on Azkar type
-  String _getScreenTitle() {
-    switch (widget.type) {
-      case AzkarType.general:
-        return 'الأذكار';
-      case AzkarType.morning:
-        return 'أذكار الصباح';
-      case AzkarType.evening:
-        return 'أذكار المساء';
-    }
   }
 }

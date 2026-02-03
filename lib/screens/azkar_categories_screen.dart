@@ -1,8 +1,25 @@
 import 'package:flutter/material.dart';
 import 'azkar_list_screen.dart';
+import '../data/adhkar_data.dart';
+import '../models/azkar_section.dart';
 
 class AzkarCategoriesScreen extends StatelessWidget {
   const AzkarCategoriesScreen({super.key});
+
+  /// Convert local Dhikr list to AzkarSection
+  AzkarSection _convertToAzkarSection(List<dynamic> dhikrList, String title) {
+    final items = dhikrList.map((dhikr) {
+      return DhikrApiItem(
+        zekr: dhikr.text,
+        repeat: dhikr.targetCount,
+      );
+    }).toList();
+
+    return AzkarSection(
+      title: title,
+      items: items,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +41,12 @@ class AzkarCategoriesScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const AzkarListScreen(type: AzkarType.general),
+                    builder: (_) => AzkarListScreen(
+                      apiSection: _convertToAzkarSection(
+                        generalAdhkar,
+                        'الأذكار العامة',
+                      ),
+                    ),
                   ),
                 );
               },
@@ -38,7 +60,12 @@ class AzkarCategoriesScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const AzkarListScreen(type: AzkarType.morning),
+                    builder: (_) => AzkarListScreen(
+                      apiSection: _convertToAzkarSection(
+                        morningAdhkar,
+                        'أذكار الصباح',
+                      ),
+                    ),
                   ),
                 );
               },
@@ -52,7 +79,12 @@ class AzkarCategoriesScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const AzkarListScreen(type: AzkarType.evening),
+                    builder: (_) => AzkarListScreen(
+                      apiSection: _convertToAzkarSection(
+                        eveningAdhkar,
+                        'أذكار المساء',
+                      ),
+                    ),
                   ),
                 );
               },
