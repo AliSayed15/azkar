@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'package:hive/hive.dart';
 import 'package:tasbeeh_app/features/azkar/models/detailed_zekr_model.dart';
 class AzkarService {
   static Map<String, List<DetailedZekr>>? _cachedAzkar;

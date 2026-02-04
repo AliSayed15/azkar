@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../models/zekr_model.dart';
 import '../services/azkar_api.dart';
-import '../services/azkar_cache.dart';
 
 class AzkarCubit extends Cubit<List<ZekrItem>> {
   final AzkarApi api;

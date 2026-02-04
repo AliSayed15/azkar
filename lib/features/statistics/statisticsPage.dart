@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 
 class StatisticsPage extends StatelessWidget {
   const StatisticsPage({super.key});
