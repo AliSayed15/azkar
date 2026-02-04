@@ -11,7 +11,7 @@ class GeneralAzkarPage extends StatefulWidget {
 }
 
 class _GeneralAzkarPageState extends State<GeneralAzkarPage> {
-  final Box box = Hive.box('tasbeehBox');
+  final Row box = Hive.box('tasbeehBox');
   Map<String, int> counters = {};
 
   @override
