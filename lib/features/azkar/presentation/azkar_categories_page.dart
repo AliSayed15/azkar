@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'azkar_detail_page.dart';
+import 'general_azkar_page.dart';  // ← السطر الجديد
 
 class AzkarCategoriesPage extends StatelessWidget {
   const AzkarCategoriesPage({super.key});
@@ -7,6 +8,9 @@ class AzkarCategoriesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final categories = [
+      // ← السطر الجديد - الأذكار العامة في الأول
+      {'title': 'الأذكار العامة', 'type': 'general', 'icon': Icons.auto_awesome},
+      
       {'title': 'أذكار الصباح', 'category': 'أذكار الصباح', 'icon': Icons.wb_sunny},
       {'title': 'أذكار المساء', 'category': 'أذكار المساء', 'icon': Icons.nights_stay},
       {'title': 'أذكار النوم', 'category': 'أذكار النوم', 'icon': Icons.bedtime},
@@ -33,15 +37,29 @@ class AzkarCategoriesPage extends StatelessWidget {
             final cat = categories[index];
             return InkWell(
               borderRadius: BorderRadius.circular(16),
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => AzkarDetailPage(
-                    title: cat['title'] as String,
-                    category: cat['category'] as String,
-                  ),
-                ),
-              ),
+              // ← التعديل الرئيسي هنا في onTap
+              onTap: () {
+                if (cat['type'] == 'general') {
+                  // لو الأذكار العامة، روح للصفحة الخاصة بيها
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const GeneralAzkarPage(),
+                    ),
+                  );
+                } else {
+                  // لو أي أذكار تانية، روح للصفحة العادية
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => AzkarDetailPage(
+                        title: cat['title'] as String,
+                        category: cat['category'] as String,
+                      ),
+                    ),
+                  );
+                }
+              },
               child: Card(
                 elevation: 3,
                 shape: RoundedRectangleBorder(
@@ -53,7 +71,8 @@ class AzkarCategoriesPage extends StatelessWidget {
                     Icon(
                       cat['icon'] as IconData,
                       size: 48,
-                      color: Colors.green,
+                      // ← التعديل في اللون - لو الأذكار العامة يبقى لونها amber (ذهبي)
+                      color: cat['type'] == 'general' ? Colors.amber : Colors.green,
                     ),
                     const SizedBox(height: 12),
                     Text(

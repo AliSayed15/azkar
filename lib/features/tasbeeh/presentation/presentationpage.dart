@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tasbeeh_app/features/tasbeeh/logic/tasbeehController.dart';
-import 'package:tasbeeh_app/core/services/notification_service.dart';
 
 
 class TasbeehPage extends StatefulWidget {
